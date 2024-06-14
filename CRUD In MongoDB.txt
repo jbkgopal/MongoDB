@@ -1,0 +1,148 @@
+------------ Insert Data In MongoDB -------------
+
+package insertMongoDB;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class InsertMongoDB {
+
+	public static void main(String[] args) throws Exception {
+		// ---------- Connecting DataBase -------------------------//
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+		// ---------- Creating DataBase ---------------------------//
+		MongoDatabase db = mongoClient.getDatabase("gopal");
+
+		// ---------- Creating Collection -------------------------//
+		MongoCollection<Document> table = db.getCollection("employee");
+
+		// ---------- Creating Document ---------------------------//
+		Document doc = new Document("name", "gopal");
+		doc.append("id", 111);
+		// ----------- Inserting Data ------------------------------//
+		table.insertOne(doc);
+	}
+
+}
+
+
+
+
+------------ Update Data In MongoDB -------------
+
+
+package updateMongoDB;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class UpdateMongoDB {
+
+	public static void main(String[] args) throws Exception {
+		// ---------- Connecting DataBase -------------------------//
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+		// ---------- Creating DataBase ---------------------------//
+		MongoDatabase db = mongoClient.getDatabase("gopal");
+
+		// ---------- Creating Collection -------------------------//
+		MongoCollection<Document> table = db.getCollection("employee");
+		
+		Document query = new Document();
+		query.put("name", "gopal");
+
+		Document newDocument = new Document();
+		newDocument.put("name", "John jonny");
+		newDocument.put("id", 111);
+
+		Document updateObject = new Document();
+		updateObject.put("$set", newDocument);
+
+		table.updateOne(query, updateObject);
+	}
+
+}
+
+
+
+
+
+------------ Delete Data In MongoDB -------------
+
+
+package deleteMongoDB;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+
+public class DeleteMongoDB {
+
+	public static void main(String[] args) throws Exception {
+		// ---------- Connecting DataBase -------------------------//
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+		// ---------- Creating DataBase ---------------------------//
+		MongoDatabase db = mongoClient.getDatabase("gopal");
+
+		// ---------- Creating Collection -------------------------//
+		MongoCollection<Document> table = db.getCollection("employee");
+		
+		Document searchQuery = new Document();
+		searchQuery.put("name", "John jonny");
+		searchQuery.put("id", 111);
+		
+
+		table.deleteOne(searchQuery);
+	}
+
+}
+
+
+
+------------ Selete Data In MongoDB -------------
+
+
+package selectMongoDB;
+
+import org.bson.Document;
+
+import com.mongodb.MongoClient;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+
+public class SelectMongoDB {
+
+	public static void main(String[] args) throws Exception {
+		// ---------- Connecting DataBase -------------------------//
+		MongoClient mongoClient = new MongoClient("localhost", 27017);
+
+		// ---------- Creating DataBase ---------------------------//
+		MongoDatabase db = mongoClient.getDatabase("gopal");
+
+		// ---------- Creating Collection -------------------------//
+		MongoCollection<Document> table = db.getCollection("employee");
+		
+		Document searchQuery = new Document();
+		searchQuery.put("name", "gopal");
+		FindIterable<Document> cursor = table.find(searchQuery);
+		
+		try (final MongoCursor<Document> cursorIterator = cursor.cursor()) {
+		    while (cursorIterator.hasNext()) {
+		        System.out.println(cursorIterator.next());
+		    }
+		}
+	}
+
+}
